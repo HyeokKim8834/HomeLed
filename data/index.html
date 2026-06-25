@@ -5,8 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home LED Control</title>
 </head>
+
 <body>
     <h1>Home LED Control</h1>
     <p>Welcome to the Home LED Control!</p>
+
+    <h2>Select a Color</h2>
+    <input type="color" id="color" value="#ff0000" oninput="sendUpdate()">
+
+    <h3>Brightness</h3>
+    <input type="range" id="brightness" min="0" max="100" value="50" oninput="sendUpdate()">
+    
+    <span id="brightnessValue">50</span>
+
+
+    <script>
+        function sendUpdate() {
+        const color = document.getElementById('color').value;       // 예: "#ff0000"
+        const brightness = document.getElementById('brightness').value; // 예: "50"
+
+        // 화면에 현재 밝기 숫자 표시
+        document.getElementById('brightnessValue').innerText = brightness;
+
+        // ESP32로 fetch 요청 보냄 - 페이지 새로고침 없이 데이터만 전송
+        fetch(`/update?color=${encodeURIComponent(color)}&brightness=${brightness}`)
+        .then(response => response.text())
+        .then(data => console.log(data));
+        }
+    </script>
 </body>
 </html>
